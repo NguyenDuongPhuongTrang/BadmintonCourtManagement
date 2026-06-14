@@ -49,6 +49,13 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/manager/**").hasRole("MANAGER")
                         .requestMatchers("/api/v1/customer/**").hasRole("CUSTOMER")
+                        // Booking
+                        .requestMatchers(HttpMethod.POST, "/api/v1/bookings").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/bookings/my-bookings").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/bookings/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/bookings/*/status").hasAnyRole("ADMIN", "MANAGER")
+                        // Court Images
+                        .requestMatchers(HttpMethod.POST, "/api/v1/courts/*/images").hasAnyRole("ADMIN", "MANAGER")
                         .anyRequest().authenticated())
                 .addFilterBefore(
                         jwtAuthenticationFilter,
